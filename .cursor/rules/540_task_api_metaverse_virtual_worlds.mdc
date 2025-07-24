@@ -1,0 +1,14 @@
+---
+description: Task API metaverse and virtual worlds infrastructure
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Virtual economy management** – handle digital asset ownership and trading.
+- **Cross-platform avatar systems** – design interoperable avatar and identity systems.
+- **Persistent virtual world state** – maintain consistent world state across sessions.
+- **Massive multiplayer synchronization** – optimize for thousands of concurrent users.
+- **Virtual property rights management** – implement digital land and asset ownership.
+- **Immersive social interaction patterns** – design voice chat and gesture communication.
+- **Virtual physics engine integration** – handle realistic physics simulation in virtual spaces.

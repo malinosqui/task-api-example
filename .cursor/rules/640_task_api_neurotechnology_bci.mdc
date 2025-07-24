@@ -1,0 +1,14 @@
+---
+description: Task API neurotechnology and brain-computer interface systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Neural signal processing** – handle real-time brain signal acquisition and processing.
+- **Brain-computer interface protocols** – implement bidirectional neural communication systems.
+- **Neuroplasticity tracking** – monitor and adapt to brain adaptation and learning patterns.
+- **Neural privacy protection** – secure sensitive neural data and thought privacy.
+- **Cognitive load monitoring** – track mental workload and cognitive state indicators.
+- **Neural rehabilitation systems** – design therapy and recovery assistance applications.
+- **Ethical AI-brain integration** – implement ethical guidelines for neural enhancement.

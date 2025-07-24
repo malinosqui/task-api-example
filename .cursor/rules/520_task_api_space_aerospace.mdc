@@ -1,0 +1,14 @@
+---
+description: Task API space technology and aerospace industry integration
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Mission-critical reliability patterns** – implement fault-tolerant systems for space applications.
+- **Radiation-hardened data structures** – design data storage resistant to cosmic radiation effects.
+- **Extreme latency handling** – optimize for deep space communication delays.
+- **Satellite constellation management** – structure endpoints for managing distributed satellite networks.
+- **Orbital mechanics calculations** – integrate trajectory and orbital prediction algorithms.
+- **Ground station communication protocols** – implement space-to-ground data transmission standards.
+- **Launch sequence automation** – design mission control and automated launch procedures.

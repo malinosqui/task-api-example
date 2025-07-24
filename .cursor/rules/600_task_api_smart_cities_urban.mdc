@@ -1,0 +1,14 @@
+---
+description: Task API smart cities and urban technology infrastructure
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Urban IoT sensor networks** – manage city-wide sensor deployments and data aggregation.
+- **Public services optimization** – optimize waste collection, public transportation, and utilities.
+- **Citizen engagement platforms** – facilitate citizen reporting and government interaction.
+- **Emergency response coordination** – coordinate police, fire, and medical emergency services.
+- **Urban planning data integration** – integrate demographic, traffic, and infrastructure data.
+- **Smart infrastructure monitoring** – monitor bridges, buildings, and public infrastructure health.
+- **Digital governance and transparency** – implement open data and citizen participation systems.

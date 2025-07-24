@@ -1,0 +1,14 @@
+---
+description: Task API robotics and industrial automation integration
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Robot fleet coordination** – manage distributed robotic systems and task allocation.
+- **Real-time motion control** – handle precise robotic movement and coordination.
+- **Safety protocol enforcement** – implement failsafe mechanisms for human-robot interaction.
+- **Sensor fusion integration** – combine multiple sensor inputs for robotic perception.
+- **Autonomous navigation systems** – structure path planning and obstacle avoidance.
+- **Robot learning and adaptation** – implement machine learning for robotic behavior.
+- **Human-robot collaboration patterns** – design safe and efficient human-robot workflows.

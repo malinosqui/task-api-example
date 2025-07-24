@@ -1,0 +1,14 @@
+---
+description: Task API AI/ML integration and intelligent features preparation
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **ML pipeline readiness** – structure data collection for machine learning model training.
+- **Feature extraction patterns** – design data structures that support feature engineering.
+- **Model inference integration** – prepare endpoints for real-time ML model predictions.
+- **A/B testing framework** – structure responses to support ML-driven A/B testing.
+- **Recommendation engine preparation** – design data models for task recommendation systems.
+- **Natural language processing support** – prepare text fields for NLP analysis and search.
+- **Anomaly detection patterns** – structure logging and metrics for anomaly detection systems.

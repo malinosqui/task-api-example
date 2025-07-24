@@ -1,0 +1,14 @@
+---
+description: Task API multi-cloud and hybrid cloud computing strategies
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Multi-cloud orchestration** – manage services across multiple cloud providers simultaneously.
+- **Hybrid cloud data synchronization** – sync data between on-premises and cloud environments.
+- **Cloud vendor lock-in prevention** – design portable solutions across different cloud platforms.
+- **Cross-cloud networking optimization** – optimize connectivity between different cloud regions.
+- **Cloud cost optimization strategies** – implement intelligent resource allocation across clouds.
+- **Disaster recovery across clouds** – design failover mechanisms between cloud providers.
+- **Cloud-agnostic deployment patterns** – structure applications for easy cross-cloud deployment.

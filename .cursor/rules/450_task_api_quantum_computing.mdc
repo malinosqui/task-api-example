@@ -1,0 +1,14 @@
+---
+description: Task API quantum computing integration and future-ready algorithms
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Quantum-resistant cryptography preparation** – implement post-quantum cryptographic algorithms.
+- **Quantum algorithm integration readiness** – structure data for quantum computing workflows.
+- **Superposition-aware data structures** – design probabilistic data handling patterns.
+- **Quantum key distribution support** – prepare for quantum-secure communication channels.
+- **Hybrid classical-quantum processing** – structure operations for quantum-classical hybrid systems.
+- **Quantum error correction awareness** – implement error-tolerant quantum computation patterns.
+- **Quantum advantage identification** – identify operations that benefit from quantum acceleration.

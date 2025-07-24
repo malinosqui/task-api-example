@@ -1,0 +1,14 @@
+---
+description: Task API edge AI and distributed inference optimization systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Model compression techniques** – optimize AI models for edge device deployment and resource constraints.
+- **Distributed inference orchestration** – coordinate AI inference across multiple edge nodes.
+- **Model quantization strategies** – reduce model precision for faster edge computation.
+- **Adaptive model selection** – dynamically choose optimal models based on device capabilities.
+- **Edge-cloud hybrid inference** – seamlessly distribute computation between edge and cloud.
+- **Real-time model updating** – deploy model updates to edge devices with minimal downtime.
+- **Energy-efficient AI algorithms** – optimize inference for battery-powered edge devices.

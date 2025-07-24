@@ -1,0 +1,14 @@
+---
+description: Task API advanced cybersecurity and threat intelligence systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Threat intelligence integration** – implement real-time threat detection and intelligence feeds.
+- **Zero-day vulnerability protection** – structure systems to defend against unknown attack vectors.
+- **Advanced persistent threat detection** – monitor and identify sophisticated long-term attacks.
+- **Behavioral anomaly detection** – implement ML-based user and system behavior analysis.
+- **Incident response automation** – automate security incident detection and response workflows.
+- **Security orchestration patterns** – coordinate multiple security tools and platforms.
+- **Threat hunting capabilities** – proactive threat discovery and investigation systems.

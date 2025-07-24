@@ -1,0 +1,14 @@
+---
+description: Task API economy and enterprise system integration patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **API marketplace readiness** – prepare APIs for commercial distribution and monetization.
+- **Enterprise integration patterns** – implement robust patterns for large-scale system integration.
+- **Business process automation** – automate complex business workflows and processes.
+- **Partner ecosystem integration** – facilitate secure integration with external business partners.
+- **Revenue optimization algorithms** – implement dynamic pricing and revenue optimization.
+- **SLA monitoring and enforcement** – track and enforce service level agreements automatically.
+- **API lifecycle governance** – manage the complete lifecycle of API products and services.

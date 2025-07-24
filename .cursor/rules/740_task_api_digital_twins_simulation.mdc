@@ -1,0 +1,14 @@
+---
+description: Task API digital twins and advanced simulation systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Digital twin synchronization** – maintain real-time sync between physical and digital representations.
+- **Physics-based simulation engines** – integrate accurate physical modeling and simulation.
+- **Multi-scale modeling support** – handle simulations from molecular to system-wide scales.
+- **Simulation result validation** – implement verification and validation of simulation outputs.
+- **Predictive simulation workflows** – use simulations for predictive maintenance and optimization.
+- **Virtual testing environments** – create safe digital environments for testing scenarios.
+- **Simulation data management** – handle large-scale simulation datasets and results.

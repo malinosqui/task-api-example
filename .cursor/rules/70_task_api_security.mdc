@@ -1,0 +1,14 @@
+---
+description: Task API security and input validation rules
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Input sanitization** – validate and sanitize all user inputs before processing.
+- **Type validation** – verify data types match expected interfaces at runtime.
+- **Rate limiting consideration** – prepare for future rate limiting implementation.
+- **Error message safety** – never expose internal system details in error responses.
+- **Parameter validation** – validate all route parameters (especially UUIDs) before use.
+- **Content-Type enforcement** – only accept `application/json` for POST/PUT/PATCH.
+- **Request size limits** – enforce reasonable payload size limits (already in express.json).

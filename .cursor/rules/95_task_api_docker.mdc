@@ -1,0 +1,16 @@
+---
+description: Task API Docker and deployment guidelines
+globs:
+  - "Dockerfile"
+  - "docker-compose*.yml"
+  - ".dockerignore"
+alwaysApply: true
+---
+
+- **Multi-stage builds** – separate build and production stages for optimal image size.
+- **Non-root user** – always run containers with non-root user (taskapi:1001).
+- **Health checks** – implement proper health check endpoints and Docker HEALTHCHECK.
+- **Environment variables** – use ENV for PORT, NODE_ENV, LOG_LEVEL configuration.
+- **Build optimization** – copy package files first for better Docker layer caching.
+- **Security scanning** – prepare for container security scanning in CI/CD.
+- **Resource limits** – consider memory and CPU limits for production deployment.

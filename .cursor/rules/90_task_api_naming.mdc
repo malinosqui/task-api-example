@@ -1,0 +1,14 @@
+---
+description: Task API naming conventions and file structure
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **File naming** – use camelCase for TypeScript files, kebab-case for configs.
+- **Function naming** – descriptive camelCase (e.g. `createTask`, `validateTaskData`).
+- **Interface naming** – PascalCase for interfaces (e.g. `Task`, `CreateTaskRequest`).
+- **Variable naming** – camelCase, avoid abbreviations, be descriptive.
+- **Constant naming** – SCREAMING_SNAKE_CASE for module-level constants.
+- **Route naming** – RESTful conventions (/tasks, /tasks/:id).
+- **Test file naming** – match source file name with `.test.ts` suffix.

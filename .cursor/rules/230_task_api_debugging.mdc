@@ -1,0 +1,14 @@
+---
+description: Task API debugging, troubleshooting, and development tools
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Debug-friendly logging** – include request/response IDs, user context, and operation flow in debug logs.
+- **Environment-specific debugging** – enable detailed logging and stack traces in development only.
+- **Request tracing** – implement correlation IDs to trace requests across service boundaries.
+- **Error context preservation** – maintain error context through async operations and service calls.
+- **Development endpoints** – create debug endpoints for health checks and internal state inspection.
+- **Performance profiling hooks** – add measurement points for identifying bottlenecks during development.
+- **Mock data utilities** – provide utilities for generating realistic test data during development.

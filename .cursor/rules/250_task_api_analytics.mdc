@@ -1,0 +1,14 @@
+---
+description: Task API analytics, insights, and usage tracking
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Usage analytics** – track endpoint usage patterns, popular features, and user behavior.
+- **Performance analytics** – collect response time distributions, error rates, and throughput metrics.
+- **Business intelligence** – track task lifecycle metrics (creation to completion times, status transitions).
+- **User journey tracking** – understand how users interact with different endpoints in sequence.
+- **Feature adoption metrics** – measure adoption rates of new features and API versions.
+- **Geographic usage patterns** – track API usage by geographic regions for optimization.
+- **Privacy-compliant analytics** – ensure user data collection complies with privacy regulations.

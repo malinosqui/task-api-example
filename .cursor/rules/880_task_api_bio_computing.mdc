@@ -1,0 +1,14 @@
+---
+description: Task API bio-computing and DNA-based computational systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **DNA sequence computation** – implement computational algorithms using DNA sequence manipulation.
+- **Biological logic gates** – design logic operations using biological molecules and reactions.
+- **Enzyme-based processing** – utilize enzymatic reactions for computational problem solving.
+- **Protein folding computation** – leverage protein structure prediction for complex calculations.
+- **Cellular automata modeling** – simulate biological cellular behaviors for computational purposes.
+- **Biomarker data processing** – analyze biological markers for health and diagnostic computation.
+- **Living system integration** – interface digital systems with living biological components.

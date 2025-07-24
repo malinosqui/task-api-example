@@ -1,0 +1,14 @@
+---
+description: Task API energy management and smart grid infrastructure
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Smart grid load balancing** – optimize electrical grid load distribution and demand response.
+- **Energy storage management** – handle battery and energy storage system optimization.
+- **Demand forecasting algorithms** – predict energy consumption patterns and peak loads.
+- **Renewable energy integration** – manage intermittent renewable energy sources.
+- **Energy trading protocols** – implement peer-to-peer energy trading systems.
+- **Grid security and resilience** – protect against cyberattacks on critical infrastructure.
+- **Microinflation energy networks** – handle distributed energy generation and consumption.

@@ -1,0 +1,14 @@
+---
+description: Task API transportation and autonomous vehicle systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Autonomous vehicle coordination** – manage fleet coordination and route optimization.
+- **Traffic flow optimization** – implement intelligent traffic management systems.
+- **Vehicle-to-everything communication** – handle V2X communication protocols.
+- **Predictive maintenance for fleets** – monitor vehicle health and maintenance scheduling.
+- **Ride-sharing algorithm optimization** – optimize passenger matching and route planning.
+- **Transportation safety systems** – implement collision avoidance and emergency response.
+- **Multimodal transportation integration** – coordinate across different transportation methods.

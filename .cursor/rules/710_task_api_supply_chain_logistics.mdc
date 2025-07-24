@@ -1,0 +1,14 @@
+---
+description: Task API supply chain and logistics optimization systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **End-to-end supply chain visibility** – track products from raw materials to end consumers.
+- **Demand forecasting and planning** – predict market demand and optimize inventory levels.
+- **Logistics route optimization** – minimize transportation costs and delivery times.
+- **Warehouse automation integration** – manage robotic fulfillment and inventory systems.
+- **Supplier relationship management** – evaluate and optimize supplier performance and risk.
+- **Trade compliance automation** – ensure international trade regulations and customs compliance.
+- **Circular economy integration** – implement sustainable and circular supply chain practices.

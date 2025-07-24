@@ -1,0 +1,14 @@
+---
+description: Task API augmented intelligence and human-AI collaboration patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Human-in-the-loop workflows** – design AI-assisted decision making with human oversight.
+- **Explainable AI integration** – structure model interpretability and decision transparency.
+- **Cognitive load balancing** – optimize AI assistance without overwhelming human operators.
+- **Adaptive learning systems** – implement systems that learn from human feedback.
+- **Bias detection and mitigation** – structure algorithmic fairness monitoring.
+- **AI confidence scoring** – implement uncertainty quantification for AI predictions.
+- **Human-AI interface optimization** – design intuitive collaboration interfaces.

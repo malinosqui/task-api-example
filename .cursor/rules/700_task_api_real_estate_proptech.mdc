@@ -1,0 +1,14 @@
+---
+description: Task API real estate and property technology optimization
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Property valuation algorithms** – implement AI-driven property appraisal and market analysis.
+- **Smart building management** – optimize building operations and energy efficiency.
+- **Real estate transaction automation** – streamline buying, selling, and leasing processes.
+- **Property portfolio optimization** – manage real estate investment portfolios and risk assessment.
+- **Tenant relationship management** – facilitate landlord-tenant communication and services.
+- **Construction project management** – coordinate building development and renovation projects.
+- **Urban development planning** – support city planning and zoning optimization.

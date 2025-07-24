@@ -1,0 +1,14 @@
+---
+description: Task API performance and optimization rules
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Memory efficiency** – avoid loading all tasks into memory when possible.
+- **Early returns** – return early from functions when conditions are met.
+- **Minimal object creation** – reuse objects and avoid unnecessary deep cloning.
+- **Efficient filtering** – implement filters at data layer, not in application layer.
+- **Response optimization** – only send required fields in API responses.
+- **Database preparation** – structure code to easily add indexes and queries later.
+- **Pagination readiness** – consider pagination for future scaling needs.

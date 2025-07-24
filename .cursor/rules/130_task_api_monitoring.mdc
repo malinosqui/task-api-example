@@ -1,0 +1,14 @@
+---
+description: Task API monitoring, metrics, and observability patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Metrics collection points** – add measurement points for task creation, updates, and deletion rates.
+- **Business metrics logging** – track business KPIs like tasks completed per day, average completion time.
+- **Performance monitoring** – measure and log response times for all endpoints.
+- **Error rate tracking** – monitor and alert on error rates by endpoint and error type.
+- **Health check depth** – implement multiple levels of health checks (shallow, deep, dependencies).
+- **Structured logging** – ensure all logs are structured JSON for easy parsing and alerting.
+- **Tracing readiness** – structure code to easily add distributed tracing when needed.

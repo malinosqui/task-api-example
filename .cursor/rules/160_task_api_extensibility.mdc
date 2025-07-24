@@ -1,0 +1,14 @@
+---
+description: Task API extensibility, versioning, and future-proofing patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **API versioning preparation** – structure routes to easily support versioning (v1, v2).
+- **Backwards compatibility** – design API changes to maintain backwards compatibility.
+- **Extension points** – create interfaces and patterns that allow easy feature additions.
+- **Plugin architecture readiness** – structure services to support plugin-based extensions.
+- **Feature flags preparation** – design code to easily add feature flags for gradual rollouts.
+- **Deprecation patterns** – establish patterns for deprecating old API versions gracefully.
+- **Schema evolution** – design data models to support non-breaking schema changes.

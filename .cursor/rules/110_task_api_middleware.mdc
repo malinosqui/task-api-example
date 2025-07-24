@@ -1,0 +1,14 @@
+---
+description: Task API middleware patterns and request processing
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Request logging middleware** – log all incoming requests with method, URL, and duration.
+- **Error boundary middleware** – catch all unhandled errors and return consistent error responses.
+- **Request validation middleware** – validate Content-Type and request structure early.
+- **CORS configuration** – prepare for cross-origin requests with proper CORS setup.
+- **Request ID middleware** – assign unique ID to each request for tracing.
+- **Timeout middleware** – implement request timeouts to prevent hanging connections.
+- **Health check middleware** – lightweight health checks that don't hit business logic.

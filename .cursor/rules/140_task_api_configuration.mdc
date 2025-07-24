@@ -1,0 +1,16 @@
+---
+description: Task API configuration management and environment handling
+globs:
+  - "src/**/*.{ts,tsx}"
+  - ".env*"
+  - "config/**/*"
+alwaysApply: true
+---
+
+- **Environment validation** – validate all required environment variables at startup.
+- **Configuration centralization** – centralize all configuration in a single config module.
+- **Secrets management** – never commit secrets, use environment variables or secret managers.
+- **Default values** – provide sensible defaults for non-critical configuration.
+- **Configuration typing** – type all configuration values with proper TypeScript interfaces.
+- **Environment-specific configs** – support different configurations for dev/staging/production.
+- **Hot configuration reload** – design configuration to support runtime changes where appropriate.

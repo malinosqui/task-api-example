@@ -1,0 +1,14 @@
+---
+description: Task API autonomous systems and self-organizing computational systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Self-healing system architecture** – automatically detect and recover from system failures.
+- **Adaptive resource allocation** – dynamically adjust computational resources based on demand.
+- **Emergent behavior patterns** – design systems that exhibit complex behaviors from simple rules.
+- **Swarm intelligence algorithms** – coordinate multiple autonomous agents for collective intelligence.
+- **Self-optimizing performance tuning** – automatically optimize system parameters for better performance.
+- **Autonomous decision making frameworks** – implement AI-driven decision systems with minimal human intervention.
+- **Collective intelligence coordination** – aggregate intelligence from multiple autonomous subsystems.

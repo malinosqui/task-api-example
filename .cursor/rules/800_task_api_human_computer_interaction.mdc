@@ -1,0 +1,14 @@
+---
+description: Task API human-computer interaction and intelligent user interface systems
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Adaptive user interface patterns** – dynamically adjust interfaces based on user behavior and preferences.
+- **Natural language interface integration** – support voice commands and conversational interactions.
+- **Gesture recognition systems** – implement touch, gesture, and motion-based controls.
+- **Contextual computing awareness** – adapt functionality based on user context and environment.
+- **Personalization algorithms** – customize user experiences using machine learning and user data.
+- **Accessibility automation** – automatically generate accessible interfaces and alternative formats.
+- **Multi-modal interaction support** – combine voice, touch, gesture, and visual inputs seamlessly.

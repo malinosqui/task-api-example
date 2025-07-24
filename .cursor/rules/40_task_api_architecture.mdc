@@ -1,0 +1,13 @@
+---
+description: Task API architecture and layer separation
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Layer separation** – routes only handle HTTP, services contain business logic, data layer handles persistence.
+- **Interface abstraction** – use `DataStore` interface to abstract persistence layer.
+- **Error classes** – use custom `ValidationError`, `NotFoundError`, `ConflictError` classes.
+- **HTTP status codes** – 201 for creation, 204 for deletion, 400/404/409/500 for errors.
+- **Service injection** – inject dependencies via constructor (e.g. `TaskService(dataStore)`).
+- **Async data operations** – all data operations must be async, even in-memory ones.

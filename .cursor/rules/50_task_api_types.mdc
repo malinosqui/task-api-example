@@ -1,0 +1,14 @@
+---
+description: Task API TypeScript types and validation rules
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Interface definitions** – use `Task`, `CreateTaskRequest`, `UpdateTaskRequest`, `PartialUpdateTaskRequest` types.
+- **Explicit function types** – always define parameter and return types for public functions.
+- **Request validation** – validate input early in routes or service methods.
+- **Type imports** – use `import type { }` for type-only imports.
+- **Date handling** – use ISO 8601 strings, validate with `new Date().toISOString()` comparison.
+- **Optional fields** – use `?:` for optional properties, handle `undefined` explicitly.
+- **Error typing** – custom error classes should extend `Error` with proper typing.

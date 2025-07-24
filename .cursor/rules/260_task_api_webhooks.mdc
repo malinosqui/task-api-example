@@ -1,0 +1,14 @@
+---
+description: Task API webhooks, events, and real-time notifications
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Event-driven architecture preparation** – design task operations to emit events for external consumption.
+- **Webhook delivery patterns** – implement reliable webhook delivery with retries and exponential backoff.
+- **Event payload consistency** – maintain consistent event payload structure across all task lifecycle events.
+- **Webhook security** – implement signature verification for webhook deliveries.
+- **Event ordering guarantees** – ensure events are delivered in the correct order for task state changes.
+- **Dead letter queue patterns** – handle failed webhook deliveries with proper error handling and retry logic.
+- **Event filtering capabilities** – allow clients to subscribe to specific event types or task conditions.

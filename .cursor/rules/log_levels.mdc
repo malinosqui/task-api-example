@@ -1,0 +1,10 @@
+---
+description: Testing discipline
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- Each function or class ≥ 20 LOC **must** have a Jest test in `tests/` with the same name.
+- **Snapshots forbidden** – use explicit assertions (e.g. `expect(result).toEqual(...)`).
+- Aim for ≥ 80 % statement coverage (run `npm run test -- --coverage`).

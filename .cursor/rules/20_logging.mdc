@@ -1,0 +1,12 @@
+---
+description: Centralised logger rule
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- Replace every direct `console.*` call with `log()` from `@/lib/logger`.
+- If a new file needs logging, **import** the shared logger:
+  ```ts
+  import { log } from "@/lib/logger";
+  ```

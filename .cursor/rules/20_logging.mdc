@@ -5,8 +5,9 @@ globs:
 alwaysApply: true
 ---
 
-- Replace every direct `console.*` call with `log()` from `@/lib/logger`.
+- Replace every direct `console.*` call with `logger` from `@/lib/logger`.
 - If a new file needs logging, **import** the shared logger:
   ```ts
-  import { log } from "@/lib/logger";
+  import { logger } from "@/lib/logger";
   ```
+- Use appropriate log levels: `logger.info()`, `logger.warn()`, `logger.error()`, `logger.debug()`.

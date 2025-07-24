@@ -1,0 +1,14 @@
+---
+description: Task API business rules and validations
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Task titles must be unique** among active (non-deleted) tasks – enforce 409 Conflict.
+- **Status validation** – only allow: 'todo', 'in-progress', 'done'.
+- **Soft delete pattern** – set `deletedAt` timestamp instead of actual deletion.
+- **UUID v4 for IDs** – use `uuid` package for task identifiers.
+- **ISO 8601 dates** – validate all date fields against proper ISO format.
+- **Input limits** – title max 200 chars, description max 1000 chars.
+- **Brazilian Portuguese errors** – user-facing error messages in pt-BR.

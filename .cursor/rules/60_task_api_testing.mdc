@@ -1,0 +1,15 @@
+---
+description: Task API testing patterns and requirements
+globs:
+  - "src/**/*.{ts,tsx}"
+  - "src/__tests__/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Integration tests** – test complete HTTP request/response cycles with `supertest`.
+- **Test data isolation** – each test should clean up or reset data state.
+- **Error scenarios** – test validation errors (400), not found (404), conflicts (409).
+- **beforeEach setup** – create fresh test data for each test case.
+- **Explicit expectations** – use `toMatchObject`, `toEqual`, `toBeDefined` instead of snapshots.
+- **HTTP status testing** – always verify both response body and status code.
+- **Test naming** – descriptive test names that explain the scenario being tested.

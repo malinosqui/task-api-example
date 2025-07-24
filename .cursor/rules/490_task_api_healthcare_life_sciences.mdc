@@ -1,0 +1,14 @@
+---
+description: Task API healthcare and life sciences compliance and integration
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **HIPAA compliance enforcement** – implement healthcare data privacy and security requirements.
+- **Electronic health record integration** – structure interoperability with EHR systems.
+- **Medical device data processing** – handle FDA-regulated medical device communications.
+- **Clinical trial data management** – implement GCP-compliant research data handling.
+- **Telemedicine platform support** – optimize for real-time medical consultations.
+- **Pharmaceutical supply chain tracking** – implement drug traceability and anti-counterfeiting.
+- **Genomic data security** – protect sensitive genetic information with specialized encryption.

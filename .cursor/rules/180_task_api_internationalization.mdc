@@ -1,0 +1,14 @@
+---
+description: Task API internationalization and localization patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Locale-aware responses** – prepare error messages and user-facing strings for i18n.
+- **Accept-Language header** – respect client language preferences when available.
+- **Date/time formatting** – always use ISO 8601 for API responses, format for display separately.
+- **Currency and number formatting** – prepare for different locale-specific formatting needs.
+- **Text direction support** – consider RTL languages in data structure design.
+- **Unicode support** – ensure proper UTF-8 handling for task titles and descriptions.
+- **Timezone awareness** – store UTC timestamps, convert to user timezone on client-side.

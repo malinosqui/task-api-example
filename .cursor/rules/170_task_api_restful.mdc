@@ -1,0 +1,14 @@
+---
+description: Task API RESTful design patterns and HTTP best practices
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **RESTful resource naming** – use plural nouns for collections (/tasks, not /task).
+- **HTTP method semantics** – GET (read), POST (create), PUT (replace), PATCH (update), DELETE (remove).
+- **Idempotency rules** – GET, PUT, DELETE must be idempotent; POST creates new resources.
+- **Content negotiation** – support Accept/Content-Type headers for JSON responses.
+- **HTTP caching headers** – use ETag, Last-Modified, Cache-Control for appropriate responses.
+- **HATEOAS preparation** – structure responses to easily add hypermedia links later.
+- **Resource representation consistency** – always return the same structure for the same resource.

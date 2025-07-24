@@ -1,0 +1,14 @@
+---
+description: Task API Progressive Web App support and modern web standards
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Service worker compatibility** – design API responses for offline-first PWA functionality.
+- **Push notification readiness** – structure endpoints for web push notification delivery.
+- **App manifest integration** – prepare metadata for PWA app manifest requirements.
+- **Background sync support** – design operations for PWA background synchronization.
+- **Install prompt optimization** – structure user experience for PWA installation flows.
+- **Performance budget adherence** – optimize API responses for PWA performance requirements.
+- **Native app bridge readiness** – prepare for WebView integration in hybrid apps.

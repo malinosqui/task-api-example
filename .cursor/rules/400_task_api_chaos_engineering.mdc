@@ -1,0 +1,14 @@
+---
+description: Task API chaos engineering and system resilience testing
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Failure injection readiness** – design systems to handle artificial failure injection.
+- **Resilience testing patterns** – structure operations to support chaos engineering experiments.
+- **Graceful degradation under stress** – implement fallback mechanisms for service failures.
+- **Chaos monkey compatibility** – prepare infrastructure for automated chaos testing.
+- **Circuit breaker implementation** – protect against cascading failures with circuit breakers.
+- **Bulkhead isolation patterns** – isolate critical resources to prevent total system failure.
+- **Recovery time optimization** – minimize time to recover from induced failures.

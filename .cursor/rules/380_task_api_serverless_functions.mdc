@@ -1,0 +1,14 @@
+---
+description: Task API serverless functions and Function-as-a-Service optimization
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Cold start optimization** – minimize initialization overhead for serverless deployments.
+- **Stateless function design** – ensure all functions can operate without persistent state.
+- **Lambda-compatible handlers** – structure endpoints for AWS Lambda/Azure Functions compatibility.
+- **Event-driven triggers** – design operations to work as event-triggered functions.
+- **Memory allocation efficiency** – optimize memory usage for cost-effective serverless execution.
+- **Timeout-aware operations** – implement operations within serverless timeout constraints.
+- **Serverless framework compatibility** – structure code for deployment with serverless frameworks.

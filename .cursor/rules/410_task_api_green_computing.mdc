@@ -1,0 +1,14 @@
+---
+description: Task API green computing practices and environmental sustainability
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Carbon footprint optimization** – minimize computational overhead to reduce energy consumption.
+- **Efficient algorithm implementation** – choose algorithms with lowest computational complexity.
+- **Resource usage monitoring** – track CPU, memory, and network usage for sustainability metrics.
+- **Lazy loading strategies** – implement on-demand loading to reduce unnecessary processing.
+- **Green deployment patterns** – optimize deployment frequency and resource allocation.
+- **Sustainable caching strategies** – balance cache efficiency with storage resource consumption.
+- **Energy-aware scaling policies** – consider environmental impact in auto-scaling decisions.

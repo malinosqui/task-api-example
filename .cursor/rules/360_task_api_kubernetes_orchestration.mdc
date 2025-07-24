@@ -1,0 +1,14 @@
+---
+description: Task API Kubernetes deployment and container orchestration patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Kubernetes-native health checks** – implement health/readiness/liveness probes for K8s deployments.
+- **Resource quota awareness** – design services to respect CPU/memory limits and requests.
+- **Horizontal pod autoscaler preparation** – structure stateless operations for automatic scaling.
+- **ConfigMap and Secret integration** – externalize configuration for K8s config management.
+- **Service mesh compatibility** – prepare for Istio/Linkerd integration with proper annotations.
+- **Pod disruption budget consideration** – design graceful shutdown for rolling updates.
+- **Kubernetes operator readiness** – structure CRD-compatible resource definitions.

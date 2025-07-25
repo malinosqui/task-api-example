@@ -1,0 +1,26 @@
+---
+description: TypeScript any type restriction
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Forbid `any` type** – use specific types, `unknown`, unions, or generics instead.
+- **Exception: Dynamic objects** – `any` allowed only for objects with truly dynamic properties:
+  ```ts
+  // ❌ Avoid
+  function process(data: any): any { ... }
+  
+  // ✅ Good alternatives
+  function process(data: unknown): User | null { ... }
+  function process<T>(data: T): ProcessedData<T> { ... }
+  
+  // ✅ Exception: dynamic object properties
+  interface DynamicConfig {
+    [key: string]: any; // OK for truly dynamic objects
+  }
+  ```
+- **Use `unknown` for uncertain types** – safer than `any`, requires type guards.
+- **Use union types** – `string | number | boolean` instead of `any`.
+- **Use generics** – `<T>` for reusable type-safe functions.
+- **External libraries** – prefer typed libraries or create proper type definitions.

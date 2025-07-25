@@ -1,0 +1,10 @@
+---
+description: Enforce export & async style
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Named exports only** – do **not** use `export default`.
+- **Async/await everywhere** – never chain raw `.then()` / `.catch()`.
+- **Descriptive variable names** – avoid one‑letter identifiers except in trivial loops.

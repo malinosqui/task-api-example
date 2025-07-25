@@ -1,0 +1,36 @@
+---
+description: Consistent error handling patterns
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+- **Custom error classes** – use specific error types for different scenarios:
+  ```ts
+  // ✅ Good
+  class ValidationError extends Error {
+    constructor(message: string, public field?: string) {
+      super(message);
+      this.name = 'ValidationError';
+    }
+  }
+  
+  // ❌ Avoid generic errors
+  throw new Error('Something went wrong');
+  ```
+- **Async error handling** – always use try-catch with async/await, never ignore promises:
+  ```ts
+  // ✅ Good
+  async function processData(): Promise<Result> {
+    try {
+      const data = await fetchData();
+      return processResult(data);
+    } catch (error) {
+      logger.error('Processing failed:', error);
+      throw new ProcessingError('Data processing failed');
+    }
+  }
+  ```
+- **Error propagation** – let errors bubble up with context, don't swallow them.
+- **Validation early** – validate inputs at the entry point of functions.
+- **Portuguese error messages** – user-facing messages in pt-BR, logs can be in English.

@@ -11,17 +11,21 @@ class PinoLogger implements Logger {
   private logger: pino.Logger;
 
   constructor() {
+    const isProduction = process.env.NODE_ENV === 'production';
     this.logger = pino({
-      level: process.env.LOG_LEVEL ?? 'info',
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          colorize: true,
-          translateTime: 'yyyy-mm-dd HH:MM:ss',
-          ignore: 'pid,hostname',
-        },
-      },
-    });
+      level: process.env.LOG_LEVEL ?? (isProduction ? 'info' : 'debug'),
+      // Em produção, mantém JSON estruturado; em dev, usa pino-pretty
+      transport: isProduction
+        ? undefined
+        : {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+              translateTime: 'yyyy-mm-dd HH:MM:ss',
+              ignore: 'pid,hostname',
+            },
+          },
+    } as pino.LoggerOptions);
   }
 
   info(message: string, meta?: object): void {

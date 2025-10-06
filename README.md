@@ -8,6 +8,7 @@ Uma API RESTful minimalista para gerenciamento de tarefas construída com Node.j
 - **Arquitetura Limpa**: Separação clara entre camadas (routes, services, data)
 - **In-Memory Storage**: Implementação inicial com interface para futura migração para BD
 - **Logging Central**: Sistema de logs estruturado com Pino
+- **Request ID**: Identificador por requisição para rastreabilidade
 - **Testes Abrangentes**: Cobertura de testes ≥ 80% com Jest
 - **Container Ready**: Dockerfile otimizado para produção
 - **Validação Robusta**: Validações de entrada e tratamento de erros

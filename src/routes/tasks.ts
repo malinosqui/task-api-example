@@ -149,6 +149,17 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
     }
   });
 
+  // GET /tasks/summary - Aggregate task metrics
+  router.get('/summary', async (_req: Request, res: Response) => {
+    try {
+      const summary = await taskService.getTaskSummary();
+      res.json(summary);
+    } catch (error) {
+      logger.error('Erro interno ao obter resumo de tarefas', { error: String(error) });
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // GET /tasks/:id - Get single task
   router.get('/:id', async (req: Request, res: Response) => {
     try {

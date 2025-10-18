@@ -42,3 +42,14 @@ export type TaskStatus = 'todo' | 'in-progress' | 'done';
 
 export type TaskSortField = 'createdAt' | 'updatedAt' | 'dueDate';
 export type SortOrder = 'asc' | 'desc';
+
+export interface TaskSummary {
+  total: number;
+  statusCounts: {
+    todo: number;
+    inProgress: number;
+    done: number;
+  };
+  overdue: number;
+  dueSoon: number;
+}

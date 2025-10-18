@@ -4,7 +4,8 @@ import type {
   CreateTaskRequest, 
   UpdateTaskRequest, 
   PartialUpdateTaskRequest,
-  TaskFilters 
+  TaskFilters,
+  TaskSummary 
 } from '../types/task.js';
 import { logger } from '../lib/logger.js';
 
@@ -56,6 +57,52 @@ export class TaskService {
     const tasks = await this.dataStore.findAll(filters);
     logger.debug('Tarefas recuperadas', { count: tasks.length, filters });
     return tasks;
+  }
+
+  async getTaskSummary(): Promise<TaskSummary> {
+    const tasks = await this.dataStore.findAll();
+    const now = new Date();
+    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+
+    const statusCounts: TaskSummary['statusCounts'] = {
+      todo: 0,
+      inProgress: 0,
+      done: 0,
+    };
+    let overdue = 0;
+    let dueSoon = 0;
+
+    for (const task of tasks) {
+      if (task.status === 'todo') {
+        statusCounts.todo += 1;
+      } else if (task.status === 'in-progress') {
+        statusCounts.inProgress += 1;
+      } else if (task.status === 'done') {
+        statusCounts.done += 1;
+      }
+
+      if (task.status !== 'done' && task.dueDate) {
+        const dueDate = new Date(task.dueDate);
+        if (!Number.isNaN(dueDate.getTime())) {
+          const diffMs = dueDate.getTime() - now.getTime();
+          if (diffMs < 0) {
+            overdue += 1;
+          } else if (diffMs <= sevenDaysInMs) {
+            dueSoon += 1;
+          }
+        }
+      }
+    }
+
+    const summary: TaskSummary = {
+      total: tasks.length,
+      statusCounts,
+      overdue,
+      dueSoon,
+    };
+
+    logger.debug('Resumo de tarefas calculado', summary);
+    return summary;
   }
 
   async getTaskById(id: string): Promise<Task> {
@@ -224,4 +271,4 @@ export class TaskService {
     const date = new Date(dateString);
     return date instanceof Date && !isNaN(date.getTime()) && dateString === date.toISOString();
   }
-} 
+}

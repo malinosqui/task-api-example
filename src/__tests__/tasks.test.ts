@@ -346,6 +346,46 @@ describe('Task API Routes', () => {
     });
   });
 
+  describe('GET /tasks/summary', () => {
+    test('should return task summary metrics', async () => {
+      const now = Date.now();
+      const overdueDate = new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString();
+      const upcomingDate = new Date(now + 2 * 24 * 60 * 60 * 1000).toISOString();
+      const distantDate = new Date(now + 10 * 24 * 60 * 60 * 1000).toISOString();
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa atrasada', status: 'todo', dueDate: overdueDate });
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa chegando', status: 'in-progress', dueDate: upcomingDate });
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa concluída', status: 'done', dueDate: distantDate });
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa sem prazo', status: 'todo' });
+
+      const response = await request(app)
+        .get('/tasks/summary')
+        .expect(200);
+
+      expect(response.body).toEqual({
+        total: 4,
+        statusCounts: {
+          todo: 2,
+          inProgress: 1,
+          done: 1,
+        },
+        overdue: 1,
+        dueSoon: 1,
+      });
+    });
+  });
+
   describe('GET /tasks/:id', () => {
     let createdTask: Task;
 

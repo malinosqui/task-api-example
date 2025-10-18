@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from 'express';
 import { TaskService, ConflictError, NotFoundError, ValidationError } from '../services/taskService.js';
-import type { CreateTaskRequest, UpdateTaskRequest, PartialUpdateTaskRequest, TaskFilters } from '../types/task.js';
+import type { CreateTaskRequest, UpdateTaskRequest, PartialUpdateTaskRequest, TaskFilters, TaskSortField, SortOrder } from '../types/task.js';
 import { logger } from '../lib/logger.js';
 
 export const createTaskRoutes = (taskService: TaskService): Router => {
@@ -71,6 +71,29 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
         if (trimmedSearch.length > 0) {
           filters.search = trimmedSearch;
         }
+      }
+
+      const validSortFields: TaskSortField[] = ['createdAt', 'updatedAt', 'dueDate'];
+      const validSortOrders: SortOrder[] = ['asc', 'desc'];
+
+      if (req.query.sortBy) {
+        const sortBy = String(req.query.sortBy) as TaskSortField;
+        if (!validSortFields.includes(sortBy)) {
+          return res.status(400).json({
+            error: 'Parâmetro sortBy deve ser: createdAt, updatedAt ou dueDate',
+          });
+        }
+        filters.sortBy = sortBy;
+      }
+
+      if (req.query.sortOrder) {
+        const sortOrder = String(req.query.sortOrder) as SortOrder;
+        if (!validSortOrders.includes(sortOrder)) {
+          return res.status(400).json({
+            error: 'Parâmetro sortOrder deve ser: asc ou desc',
+          });
+        }
+        filters.sortOrder = sortOrder;
       }
 
       const tasks = await taskService.getAllTasks(filters);

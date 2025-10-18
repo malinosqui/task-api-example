@@ -164,6 +164,15 @@ describe('Task API Routes', () => {
       expect(response.body[0]?.dueDate).toBe('2024-12-31T23:59:59.999Z');
     });
 
+    test('should return tasks sorted by createdAt descending by default', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .expect(200);
+
+      expect(response.body[0]?.title).toBe('Tarefa com Data');
+      expect(response.body[response.body.length - 1]?.title).toBe('Tarefa Todo');
+    });
+
     test('should filter tasks by search term in title or description', async () => {
       await request(app)
         .post('/tasks')
@@ -186,6 +195,28 @@ describe('Task API Routes', () => {
       expect(responseByDescription.body[0]?.title).toBe('Planejar Sprint');
     });
 
+    test('should sort tasks by dueDate ascending', async () => {
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa com dueDate mais próxima', status: 'todo', dueDate: '2024-01-01T00:00:00.000Z' });
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa com dueDate mais distante', status: 'todo', dueDate: '2025-01-01T00:00:00.000Z' });
+
+      const response = await request(app)
+        .get('/tasks')
+        .query({ sortBy: 'dueDate', sortOrder: 'asc' })
+        .expect(200);
+
+      expect(response.body[0]?.title).toBe('Tarefa com dueDate mais próxima');
+      const dueDates = response.body
+        .filter((task: Task) => task.dueDate)
+        .map((task: Task) => task.dueDate);
+      expect(dueDates).toEqual([...dueDates].sort());
+      expect(response.body[response.body.length - 1]?.dueDate).toBeUndefined();
+    });
+
     test('should return 400 for invalid status filter', async () => {
       const response = await request(app)
         .get('/tasks?status=invalid')
@@ -203,6 +234,28 @@ describe('Task API Routes', () => {
 
       expect(response.body).toEqual({
         error: 'Data de vencimento deve estar no formato ISO 8601',
+      });
+    });
+
+    test('should return 400 for invalid sort field', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ sortBy: 'invalid-field' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro sortBy deve ser: createdAt, updatedAt ou dueDate',
+      });
+    });
+
+    test('should return 400 for invalid sort order', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ sortOrder: 'sideways' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro sortOrder deve ser: asc ou desc',
       });
     });
 

@@ -73,6 +73,31 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
         }
       }
 
+      const defaultPage = 1;
+      const defaultPageSize = 20;
+      let page = defaultPage;
+      let pageSize = defaultPageSize;
+
+      if (req.query.page) {
+        const parsedPage = Number.parseInt(String(req.query.page), 10);
+        if (Number.isNaN(parsedPage) || parsedPage < 1) {
+          return res.status(400).json({
+            error: 'Parâmetro page deve ser um inteiro maior ou igual a 1',
+          });
+        }
+        page = parsedPage;
+      }
+
+      if (req.query.pageSize) {
+        const parsedPageSize = Number.parseInt(String(req.query.pageSize), 10);
+        if (Number.isNaN(parsedPageSize) || parsedPageSize < 1 || parsedPageSize > 100) {
+          return res.status(400).json({
+            error: 'Parâmetro pageSize deve ser um inteiro entre 1 e 100',
+          });
+        }
+        pageSize = parsedPageSize;
+      }
+
       const validSortFields: TaskSortField[] = ['createdAt', 'updatedAt', 'dueDate'];
       const validSortOrders: SortOrder[] = ['asc', 'desc'];
 
@@ -96,9 +121,28 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
         filters.sortOrder = sortOrder;
       }
 
+      filters.page = page;
+      filters.pageSize = pageSize;
+
       const tasks = await taskService.getAllTasks(filters);
-      logger.debug('Tarefas listadas via API', { count: tasks.length, filters });
-      res.json(tasks);
+      const totalCount = tasks.length;
+      const totalPages = totalCount === 0 ? 0 : Math.ceil(totalCount / pageSize);
+      const startIndex = (page - 1) * pageSize;
+      const paginatedTasks = tasks.slice(startIndex, startIndex + pageSize);
+
+      res.setHeader('X-Total-Count', String(totalCount));
+      res.setHeader('X-Total-Pages', String(totalPages));
+      res.setHeader('X-Page', String(page));
+      res.setHeader('X-Page-Size', String(pageSize));
+
+      logger.debug('Tarefas listadas via API', {
+        totalCount,
+        page,
+        pageSize,
+        totalPages,
+        filters: { ...filters },
+      });
+      res.json(paginatedTasks);
     } catch (error) {
       logger.error('Erro interno ao listar tarefas', { error: String(error) });
       res.status(500).json({ error: 'Erro interno do servidor' });

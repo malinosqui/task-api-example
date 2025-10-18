@@ -60,6 +60,19 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
         }
       }
 
+      if (req.query.search) {
+        const search = String(req.query.search);
+        if (search.length > 200) {
+          return res.status(400).json({
+            error: 'Parâmetro search deve ter no máximo 200 caracteres',
+          });
+        }
+        const trimmedSearch = search.trim();
+        if (trimmedSearch.length > 0) {
+          filters.search = trimmedSearch;
+        }
+      }
+
       const tasks = await taskService.getAllTasks(filters);
       logger.debug('Tarefas listadas via API', { count: tasks.length, filters });
       res.json(tasks);
@@ -186,4 +199,4 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
   });
 
   return router;
-}; 
+};

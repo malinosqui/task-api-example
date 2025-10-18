@@ -164,6 +164,28 @@ describe('Task API Routes', () => {
       expect(response.body[0]?.dueDate).toBe('2024-12-31T23:59:59.999Z');
     });
 
+    test('should filter tasks by search term in title or description', async () => {
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Planejar Sprint', description: 'Revisar backlog do produto' });
+
+      const responseByTitle = await request(app)
+        .get('/tasks')
+        .query({ search: 'progresso' })
+        .expect(200);
+
+      expect(responseByTitle.body).toHaveLength(1);
+      expect(responseByTitle.body[0]?.title).toBe('Tarefa Em Progresso');
+
+      const responseByDescription = await request(app)
+        .get('/tasks')
+        .query({ search: 'backlog' })
+        .expect(200);
+
+      expect(responseByDescription.body).toHaveLength(1);
+      expect(responseByDescription.body[0]?.title).toBe('Planejar Sprint');
+    });
+
     test('should return 400 for invalid status filter', async () => {
       const response = await request(app)
         .get('/tasks?status=invalid')
@@ -181,6 +203,18 @@ describe('Task API Routes', () => {
 
       expect(response.body).toEqual({
         error: 'Data de vencimento deve estar no formato ISO 8601',
+      });
+    });
+
+    test('should return 400 for search term longer than allowed', async () => {
+      const tooLongSearch = 'a'.repeat(201);
+      const response = await request(app)
+        .get('/tasks')
+        .query({ search: tooLongSearch })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro search deve ter no máximo 200 caracteres',
       });
     });
 

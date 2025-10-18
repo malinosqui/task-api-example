@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { Task, TaskFilters } from '../types/task.js';
+import type { Task, TaskFilters, TaskSortField, SortOrder } from '../types/task.js';
 import type { DataStore } from './dataStore.js';
 
 export class MemoryStore implements DataStore {
@@ -48,6 +48,44 @@ export class MemoryStore implements DataStore {
         });
       }
     }
+
+    const sortBy: TaskSortField = filters?.sortBy ?? 'createdAt';
+    const sortOrder: SortOrder = filters?.sortOrder ?? 'desc';
+
+    const getFieldValue = (task: Task, field: TaskSortField): string | undefined => {
+      if (field === 'createdAt') {
+        return task.createdAt;
+      }
+      if (field === 'updatedAt') {
+        return task.updatedAt;
+      }
+      return task.dueDate;
+    };
+
+    tasks = tasks.sort((a, b) => {
+      const aValue = getFieldValue(a, sortBy);
+      const bValue = getFieldValue(b, sortBy);
+
+      if (!aValue && !bValue) {
+        return 0;
+      }
+      if (!aValue) {
+        return 1;
+      }
+      if (!bValue) {
+        return -1;
+      }
+
+      if (aValue === bValue) {
+        return 0;
+      }
+
+      if (sortOrder === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      }
+
+      return aValue < bValue ? 1 : -1;
+    });
 
     return tasks.map(task => ({ ...task }));
   }

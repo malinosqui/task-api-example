@@ -32,6 +32,11 @@ export interface TaskFilters {
   status?: 'todo' | 'in-progress' | 'done';
   dueDate?: string;
   search?: string;
+  sortBy?: 'createdAt' | 'updatedAt' | 'dueDate';
+  sortOrder?: 'asc' | 'desc';
 }
 
 export type TaskStatus = 'todo' | 'in-progress' | 'done';
+
+export type TaskSortField = 'createdAt' | 'updatedAt' | 'dueDate';
+export type SortOrder = 'asc' | 'desc';

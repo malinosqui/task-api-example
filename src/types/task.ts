@@ -34,6 +34,8 @@ export interface TaskFilters {
   search?: string;
   sortBy?: 'createdAt' | 'updatedAt' | 'dueDate';
   sortOrder?: 'asc' | 'desc';
+  page?: number;
+  pageSize?: number;
 }
 
 export type TaskStatus = 'todo' | 'in-progress' | 'done';

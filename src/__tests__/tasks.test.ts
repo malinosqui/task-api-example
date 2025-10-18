@@ -217,6 +217,42 @@ describe('Task API Routes', () => {
       expect(response.body[response.body.length - 1]?.dueDate).toBeUndefined();
     });
 
+    test('should apply pagination defaults and expose metadata headers', async () => {
+      for (let index = 0; index < 25; index += 1) {
+        await request(app)
+          .post('/tasks')
+          .send({ title: `Tarefa extra ${index}`, status: 'todo' });
+      }
+
+      const response = await request(app)
+        .get('/tasks')
+        .expect(200);
+
+      expect(response.body).toHaveLength(20);
+      expect(response.headers['x-total-count']).toBe('29');
+      expect(response.headers['x-total-pages']).toBe('2');
+      expect(response.headers['x-page']).toBe('1');
+      expect(response.headers['x-page-size']).toBe('20');
+    });
+
+    test('should return requested page and page size', async () => {
+      for (let index = 0; index < 15; index += 1) {
+        await request(app)
+          .post('/tasks')
+          .send({ title: `Paginacao ${index}`, status: 'todo' });
+      }
+
+      const response = await request(app)
+        .get('/tasks')
+        .query({ page: '2', pageSize: '10', sortBy: 'createdAt', sortOrder: 'asc' })
+        .expect(200);
+
+      expect(response.body).toHaveLength(10);
+      expect(response.body[0]?.title).toBe('Paginacao 6');
+      expect(response.headers['x-page']).toBe('2');
+      expect(response.headers['x-page-size']).toBe('10');
+    });
+
     test('should return 400 for invalid status filter', async () => {
       const response = await request(app)
         .get('/tasks?status=invalid')
@@ -256,6 +292,28 @@ describe('Task API Routes', () => {
 
       expect(response.body).toEqual({
         error: 'Parâmetro sortOrder deve ser: asc ou desc',
+      });
+    });
+
+    test('should return 400 for invalid page parameter', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ page: '0' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro page deve ser um inteiro maior ou igual a 1',
+      });
+    });
+
+    test('should return 400 for invalid pageSize parameter', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ pageSize: '101' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro pageSize deve ser um inteiro entre 1 e 100',
       });
     });
 

@@ -36,6 +36,19 @@ export class MemoryStore implements DataStore {
       tasks = tasks.filter(task => task.dueDate === filters.dueDate);
     }
 
+    if (filters?.search) {
+      const normalizedSearch = filters.search.trim().toLowerCase();
+      if (normalizedSearch.length > 0) {
+        tasks = tasks.filter(task => {
+          const titleMatches = task.title.toLowerCase().includes(normalizedSearch);
+          const descriptionMatches = task.description
+            ? task.description.toLowerCase().includes(normalizedSearch)
+            : false;
+          return titleMatches || descriptionMatches;
+        });
+      }
+    }
+
     return tasks.map(task => ({ ...task }));
   }
 
@@ -91,4 +104,4 @@ export class MemoryStore implements DataStore {
   async getAll(): Promise<Task[]> {
     return Array.from(this.tasks.values()).map(task => ({ ...task }));
   }
-} 
+}

@@ -31,6 +31,7 @@ export interface PartialUpdateTaskRequest {
 export interface TaskFilters {
   status?: 'todo' | 'in-progress' | 'done';
   dueDate?: string;
+  search?: string;
 }
 
-export type TaskStatus = 'todo' | 'in-progress' | 'done'; 
+export type TaskStatus = 'todo' | 'in-progress' | 'done';

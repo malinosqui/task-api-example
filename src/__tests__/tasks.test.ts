@@ -1,8 +1,12 @@
 import request from 'supertest';
+import type express from 'express';
 import { createApp } from '../app.js';
 import type { Task } from '../types/task.js';
 
-const app = createApp();
+let app: express.Application;
+beforeEach(() => {
+  app = createApp();
+});
 
 describe('Task API Routes', () => {
   describe('POST /tasks', () => {

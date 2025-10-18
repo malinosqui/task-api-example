@@ -3,31 +3,39 @@ import { createTaskRoutes } from './routes/tasks.js';
 import { TaskService } from './services/taskService.js';
 import { MemoryStore } from './data/memoryStore.js';
 import { logger } from './lib/logger.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export const createApp = (): express.Application => {
   const app = express();
+
+  // Security: remove X-Powered-By header
+  app.disable('x-powered-by');
 
   // Middleware para parsing JSON
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));
 
-  // Middleware de logging
+  // Middleware de correlação e logging
   app.use((req: Request, res: Response, next: NextFunction) => {
     const start = Date.now();
-    const originalSend = res.send;
+    const requestId = uuidv4();
 
-    res.send = function (body) {
+    res.setHeader('X-Request-Id', requestId);
+    res.locals.requestId = requestId;
+
+    res.on('finish', () => {
       const duration = Date.now() - start;
       logger.info('Requisição HTTP processada', {
+        requestId,
         method: req.method,
-        url: req.url,
+        url: req.originalUrl ?? req.url,
         statusCode: res.statusCode,
-        duration: `${duration}ms`,
+        durationMs: duration,
+        contentLength: res.getHeader('Content-Length'),
         userAgent: req.get('User-Agent'),
         ip: req.ip,
       });
-      return originalSend.call(this, body);
-    };
+    });
 
     next();
   });
@@ -72,7 +80,12 @@ export const createApp = (): express.Application => {
 };
 
 // Inicializar servidor se executado diretamente
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Compatível com CommonJS (require.main) e ambientes de teste
+// ts-node/tsx respeitam require.main quando o pacote é CJS
+// (package.json sem "type": "module" e tsconfig module: commonjs)
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - require/module são definidos em tempo de execução Node (CJS)
+if (typeof require !== 'undefined' && typeof module !== 'undefined' && require.main === module) {
   const app = createApp();
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 

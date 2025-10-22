@@ -3,6 +3,11 @@ import { TaskService, ConflictError, NotFoundError, ValidationError } from '../s
 import type { CreateTaskRequest, UpdateTaskRequest, PartialUpdateTaskRequest, TaskFilters, TaskSortField, SortOrder } from '../types/task.js';
 import { logger } from '../lib/logger.js';
 
+const isValidISODateString = (value: string): boolean => {
+  const date = new Date(value);
+  return !Number.isNaN(date.getTime()) && value === date.toISOString();
+};
+
 export const createTaskRoutes = (taskService: TaskService): Router => {
   const router = Router();
 
@@ -13,17 +18,17 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
       const task = await taskService.createTask(taskData);
       
       logger.info('Nova tarefa criada via API', { taskId: task.id });
-      res.status(201).json(task);
+      return res.status(201).json(task);
     } catch (error) {
       if (error instanceof ConflictError) {
         logger.warn('Conflito ao criar tarefa', { error: error.message });
-        res.status(409).json({ error: error.message });
+        return res.status(409).json({ error: error.message });
       } else if (error instanceof ValidationError) {
         logger.warn('Dados inválidos para criação de tarefa', { error: error.message });
-        res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
       } else {
         logger.error('Erro interno ao criar tarefa', { error: String(error) });
-        res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
       }
     }
   });
@@ -45,17 +50,40 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
 
       if (req.query.dueDate) {
         const dueDate = String(req.query.dueDate);
-        try {
-          const date = new Date(dueDate);
-          if (isNaN(date.getTime()) || dueDate !== date.toISOString()) {
-            return res.status(400).json({ 
-              error: 'Data de vencimento deve estar no formato ISO 8601' 
-            });
-          }
-          filters.dueDate = dueDate;
-        } catch {
-          return res.status(400).json({ 
-            error: 'Data de vencimento deve estar no formato ISO 8601' 
+        if (!isValidISODateString(dueDate)) {
+          return res.status(400).json({
+            error: 'Data de vencimento deve estar no formato ISO 8601',
+          });
+        }
+        filters.dueDate = dueDate;
+      }
+
+      if (req.query.dueBefore) {
+        const dueBefore = String(req.query.dueBefore);
+        if (!isValidISODateString(dueBefore)) {
+          return res.status(400).json({
+            error: 'Parâmetro dueBefore deve estar no formato ISO 8601',
+          });
+        }
+        filters.dueBefore = dueBefore;
+      }
+
+      if (req.query.dueAfter) {
+        const dueAfter = String(req.query.dueAfter);
+        if (!isValidISODateString(dueAfter)) {
+          return res.status(400).json({
+            error: 'Parâmetro dueAfter deve estar no formato ISO 8601',
+          });
+        }
+        filters.dueAfter = dueAfter;
+      }
+
+      if (filters.dueBefore && filters.dueAfter) {
+        const dueBeforeTime = new Date(filters.dueBefore).getTime();
+        const dueAfterTime = new Date(filters.dueAfter).getTime();
+        if (dueAfterTime > dueBeforeTime) {
+          return res.status(400).json({
+            error: 'Parâmetro dueAfter deve ser anterior ou igual a dueBefore',
           });
         }
       }
@@ -142,10 +170,10 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
         totalPages,
         filters: { ...filters },
       });
-      res.json(paginatedTasks);
+      return res.json(paginatedTasks);
     } catch (error) {
       logger.error('Erro interno ao listar tarefas', { error: String(error) });
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   });
 
@@ -153,10 +181,10 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
   router.get('/summary', async (_req: Request, res: Response) => {
     try {
       const summary = await taskService.getTaskSummary();
-      res.json(summary);
+      return res.json(summary);
     } catch (error) {
       logger.error('Erro interno ao obter resumo de tarefas', { error: String(error) });
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   });
 
@@ -164,20 +192,23 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
   router.get('/:id', async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ error: 'Parâmetro id é obrigatório' });
+      }
       const task = await taskService.getTaskById(id);
       
       logger.debug('Tarefa recuperada via API', { taskId: id });
-      res.json(task);
+      return res.json(task);
     } catch (error) {
       if (error instanceof NotFoundError) {
         logger.warn('Tentativa de acessar tarefa inexistente', { taskId: req.params.id });
-        res.status(404).json({ error: error.message });
+        return res.status(404).json({ error: error.message });
       } else {
         logger.error('Erro interno ao recuperar tarefa', { 
           taskId: req.params.id, 
           error: String(error) 
         });
-        res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
       }
     }
   });
@@ -186,33 +217,36 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
   router.put('/:id', async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ error: 'Parâmetro id é obrigatório' });
+      }
       const taskData: UpdateTaskRequest = req.body;
       const task = await taskService.updateTask(id, taskData);
       
       logger.info('Tarefa atualizada completamente via API', { taskId: id });
-      res.json(task);
+      return res.json(task);
     } catch (error) {
       if (error instanceof NotFoundError) {
         logger.warn('Tentativa de atualizar tarefa inexistente', { taskId: req.params.id });
-        res.status(404).json({ error: error.message });
+        return res.status(404).json({ error: error.message });
       } else if (error instanceof ConflictError) {
         logger.warn('Conflito ao atualizar tarefa', { 
           taskId: req.params.id, 
           error: error.message 
         });
-        res.status(409).json({ error: error.message });
+        return res.status(409).json({ error: error.message });
       } else if (error instanceof ValidationError) {
         logger.warn('Dados inválidos para atualização de tarefa', { 
           taskId: req.params.id, 
           error: error.message 
         });
-        res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
       } else {
         logger.error('Erro interno ao atualizar tarefa', { 
           taskId: req.params.id, 
           error: String(error) 
         });
-        res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
       }
     }
   });
@@ -221,35 +255,38 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
   router.patch('/:id', async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ error: 'Parâmetro id é obrigatório' });
+      }
       const taskData: PartialUpdateTaskRequest = req.body;
       const task = await taskService.partialUpdateTask(id, taskData);
       
       logger.info('Tarefa atualizada parcialmente via API', { taskId: id });
-      res.json(task);
+      return res.json(task);
     } catch (error) {
       if (error instanceof NotFoundError) {
         logger.warn('Tentativa de atualizar parcialmente tarefa inexistente', { 
           taskId: req.params.id 
         });
-        res.status(404).json({ error: error.message });
+        return res.status(404).json({ error: error.message });
       } else if (error instanceof ConflictError) {
         logger.warn('Conflito ao atualizar parcialmente tarefa', { 
           taskId: req.params.id, 
           error: error.message 
         });
-        res.status(409).json({ error: error.message });
+        return res.status(409).json({ error: error.message });
       } else if (error instanceof ValidationError) {
         logger.warn('Dados inválidos para atualização parcial de tarefa', { 
           taskId: req.params.id, 
           error: error.message 
         });
-        res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
       } else {
         logger.error('Erro interno ao atualizar parcialmente tarefa', { 
           taskId: req.params.id, 
           error: String(error) 
         });
-        res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
       }
     }
   });
@@ -258,20 +295,23 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
   router.delete('/:id', async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ error: 'Parâmetro id é obrigatório' });
+      }
       await taskService.deleteTask(id);
       
       logger.info('Tarefa deletada via API', { taskId: id });
-      res.status(204).send();
+      return res.status(204).send();
     } catch (error) {
       if (error instanceof NotFoundError) {
         logger.warn('Tentativa de deletar tarefa inexistente', { taskId: req.params.id });
-        res.status(404).json({ error: error.message });
+        return res.status(404).json({ error: error.message });
       } else {
         logger.error('Erro interno ao deletar tarefa', { 
           taskId: req.params.id, 
           error: String(error) 
         });
-        res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
       }
     }
   });

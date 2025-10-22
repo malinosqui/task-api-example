@@ -23,4 +23,7 @@ module.exports = {
   // Disable snapshot testing
   snapshotSerializers: [],
   testResultsProcessor: undefined,
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 }; 

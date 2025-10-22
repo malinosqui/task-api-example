@@ -42,12 +42,20 @@ export class TaskService {
       throw new ConflictError('Uma tarefa com este título já existe');
     }
 
-    const task = await this.dataStore.create({
+    const newTaskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'> = {
       title: taskData.title,
-      description: taskData.description,
       status: taskData.status ?? 'todo',
-      dueDate: taskData.dueDate,
-    });
+    };
+
+    if (taskData.description !== undefined) {
+      newTaskData.description = taskData.description;
+    }
+
+    if (taskData.dueDate !== undefined) {
+      newTaskData.dueDate = taskData.dueDate;
+    }
+
+    const task = await this.dataStore.create(newTaskData);
 
     logger.info('Tarefa criada com sucesso', { taskId: task.id, title: task.title });
     return task;
@@ -138,9 +146,9 @@ export class TaskService {
 
     const updatedTask = await this.dataStore.update(id, {
       title: taskData.title,
-      description: taskData.description,
       status: taskData.status,
-      dueDate: taskData.dueDate,
+      ...(taskData.description !== undefined ? { description: taskData.description } : {}),
+      ...(taskData.dueDate !== undefined ? { dueDate: taskData.dueDate } : {}),
     });
 
     if (!updatedTask) {

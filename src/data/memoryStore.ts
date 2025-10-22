@@ -36,6 +36,34 @@ export class MemoryStore implements DataStore {
       tasks = tasks.filter(task => task.dueDate === filters.dueDate);
     }
 
+    if (filters?.dueBefore) {
+      const dueBeforeTime = new Date(filters.dueBefore).getTime();
+      tasks = tasks.filter(task => {
+        if (!task.dueDate) {
+          return false;
+        }
+        const taskDueTime = new Date(task.dueDate).getTime();
+        if (Number.isNaN(taskDueTime) || Number.isNaN(dueBeforeTime)) {
+          return false;
+        }
+        return taskDueTime <= dueBeforeTime;
+      });
+    }
+
+    if (filters?.dueAfter) {
+      const dueAfterTime = new Date(filters.dueAfter).getTime();
+      tasks = tasks.filter(task => {
+        if (!task.dueDate) {
+          return false;
+        }
+        const taskDueTime = new Date(task.dueDate).getTime();
+        if (Number.isNaN(taskDueTime) || Number.isNaN(dueAfterTime)) {
+          return false;
+        }
+        return taskDueTime >= dueAfterTime;
+      });
+    }
+
     if (filters?.search) {
       const normalizedSearch = filters.search.trim().toLowerCase();
       if (normalizedSearch.length > 0) {

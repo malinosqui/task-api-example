@@ -31,6 +31,8 @@ export interface PartialUpdateTaskRequest {
 export interface TaskFilters {
   status?: 'todo' | 'in-progress' | 'done';
   dueDate?: string;
+  dueBefore?: string;
+  dueAfter?: string;
   search?: string;
   sortBy?: 'createdAt' | 'updatedAt' | 'dueDate';
   sortOrder?: 'asc' | 'desc';

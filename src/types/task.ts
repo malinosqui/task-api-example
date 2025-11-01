@@ -1,9 +1,9 @@
 export interface Task {
   id: string;
   title: string;
-  description?: string;
+  description?: string | undefined;
   status: 'todo' | 'in-progress' | 'done';
-  dueDate?: string;
+  dueDate?: string | undefined;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
@@ -11,23 +11,23 @@ export interface Task {
 
 export interface CreateTaskRequest {
   title: string;
-  description?: string;
+  description?: string | null;
   status?: 'todo' | 'in-progress' | 'done';
-  dueDate?: string;
+  dueDate?: string | null;
 }
 
 export interface UpdateTaskRequest {
   title: string;
-  description?: string;
+  description?: string | null;
   status: 'todo' | 'in-progress' | 'done';
-  dueDate?: string;
+  dueDate?: string | null;
 }
 
 export interface PartialUpdateTaskRequest {
   title?: string;
   status?: 'todo' | 'in-progress' | 'done';
-  description?: string;
-  dueDate?: string;
+  description?: string | null;
+  dueDate?: string | null;
 }
 
 export interface TaskFilters {

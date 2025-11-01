@@ -164,13 +164,68 @@ describe('Task API Routes', () => {
       expect(response.body[0]?.dueDate).toBe('2024-12-31T23:59:59.999Z');
     });
 
+    test('should filter tasks due before a given date', async () => {
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa antes do prazo', status: 'todo', dueDate: '2024-05-15T00:00:00.000Z' });
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa após o prazo', status: 'todo', dueDate: '2024-07-15T00:00:00.000Z' });
+
+      const response = await request(app)
+        .get('/tasks')
+        .query({ dueBefore: '2024-06-01T00:00:00.000Z' })
+        .expect(200);
+
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0]?.title).toBe('Tarefa antes do prazo');
+    });
+
+    test('should filter tasks due after a given date', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ dueAfter: '2024-12-01T00:00:00.000Z' })
+        .expect(200);
+
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0]?.title).toBe('Tarefa com Data');
+    });
+
+    test('should filter tasks between dueAfter and dueBefore', async () => {
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa dentro do intervalo', status: 'todo', dueDate: '2024-06-15T00:00:00.000Z' });
+
+      await request(app)
+        .post('/tasks')
+        .send({ title: 'Tarefa fora do intervalo', status: 'todo', dueDate: '2024-08-01T00:00:00.000Z' });
+
+      const response = await request(app)
+        .get('/tasks')
+        .query({ dueAfter: '2024-06-01T00:00:00.000Z', dueBefore: '2024-06-30T00:00:00.000Z' })
+        .expect(200);
+
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0]?.title).toBe('Tarefa dentro do intervalo');
+    });
+
     test('should return tasks sorted by createdAt descending by default', async () => {
       const response = await request(app)
         .get('/tasks')
         .expect(200);
 
-      expect(response.body[0]?.title).toBe('Tarefa com Data');
-      expect(response.body[response.body.length - 1]?.title).toBe('Tarefa Todo');
+      const createdAtValues = response.body.map((task: Task) => task.createdAt);
+      const sortedCreatedAt = [...createdAtValues].sort((a, b) => {
+        if (a === b) {
+          return 0;
+        }
+        return a > b ? -1 : 1;
+      });
+
+      expect(createdAtValues).toEqual(sortedCreatedAt);
+      expect(response.body.some((task: Task) => task.title === 'Tarefa com Data')).toBe(true);
+      expect(response.body.some((task: Task) => task.title === 'Tarefa Todo')).toBe(true);
     });
 
     test('should filter tasks by search term in title or description', async () => {
@@ -236,7 +291,7 @@ describe('Task API Routes', () => {
     });
 
     test('should return requested page and page size', async () => {
-      for (let index = 0; index < 15; index += 1) {
+      for (let index = 0; index < 16; index += 1) {
         await request(app)
           .post('/tasks')
           .send({ title: `Paginacao ${index}`, status: 'todo' });
@@ -270,6 +325,42 @@ describe('Task API Routes', () => {
 
       expect(response.body).toEqual({
         error: 'Data de vencimento deve estar no formato ISO 8601',
+      });
+    });
+
+    test('should return 400 for invalid dueBefore filter', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ dueBefore: 'invalid-date' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro dueBefore deve estar no formato ISO 8601',
+      });
+    });
+
+    test('should return 400 for invalid dueAfter filter', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({ dueAfter: 'invalid-date' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro dueAfter deve estar no formato ISO 8601',
+      });
+    });
+
+    test('should return 400 when dueAfter is greater than dueBefore', async () => {
+      const response = await request(app)
+        .get('/tasks')
+        .query({
+          dueAfter: '2024-07-01T00:00:00.000Z',
+          dueBefore: '2024-06-01T00:00:00.000Z',
+        })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Parâmetro dueAfter deve ser anterior ou igual a dueBefore',
       });
     });
 
@@ -482,6 +573,35 @@ describe('Task API Routes', () => {
       });
     });
 
+    test('should allow clearing optional fields on full update', async () => {
+      const withOptional = await request(app)
+        .put(`/tasks/${createdTask.id}`)
+        .send({
+          title: 'Tarefa com campos opcionais',
+          status: 'in-progress',
+          description: 'Descrição temporária',
+          dueDate: '2025-03-01T00:00:00.000Z',
+        })
+        .expect(200);
+      expect(withOptional.body.description).toBe('Descrição temporária');
+      expect(withOptional.body.dueDate).toBe('2025-03-01T00:00:00.000Z');
+
+      const response = await request(app)
+        .put(`/tasks/${createdTask.id}`)
+        .send({
+          title: 'Tarefa com campos opcionais',
+          status: 'done',
+          description: null,
+          dueDate: null,
+        })
+        .expect(200);
+
+      expect(response.body.description).toBeUndefined();
+      expect(response.body.dueDate).toBeUndefined();
+      expect(response.body.status).toBe('done');
+      expect(response.body.title).toBe('Tarefa com campos opcionais');
+    });
+
     test('should return 409 for duplicate title', async () => {
       await request(app)
         .post('/tasks')
@@ -536,6 +656,87 @@ describe('Task API Routes', () => {
 
       expect(response.body.title).toBe('Título e status');
       expect(response.body.status).toBe('in-progress');
+    });
+
+    test('should update task description only', async () => {
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ description: 'Descrição atualizada parcialmente' })
+        .expect(200);
+
+      expect(response.body.description).toBe('Descrição atualizada parcialmente');
+      expect(response.body.title).toBe(createdTask.title);
+      expect(response.body.status).toBe(createdTask.status);
+    });
+
+    test('should update task due date only', async () => {
+      const newDueDate = '2025-01-10T12:00:00.000Z';
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ dueDate: newDueDate })
+        .expect(200);
+
+      expect(response.body.dueDate).toBe(newDueDate);
+      expect(response.body.title).toBe(createdTask.title);
+      expect(response.body.status).toBe(createdTask.status);
+    });
+
+    test('should remove task description when patched with null', async () => {
+      await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ description: 'Descrição temporária' })
+        .expect(200);
+
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ description: null })
+        .expect(200);
+
+      expect(response.body.description).toBeUndefined();
+      expect(response.body.title).toBe(createdTask.title);
+      expect(response.body.status).toBe(createdTask.status);
+    });
+
+    test('should remove task due date when patched with null', async () => {
+      const dueDateResponse = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ dueDate: '2025-02-01T09:00:00.000Z' })
+        .expect(200);
+
+      expect(dueDateResponse.body.dueDate).toBe('2025-02-01T09:00:00.000Z');
+
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ dueDate: null })
+        .expect(200);
+
+      expect(response.body.dueDate).toBeUndefined();
+      expect(response.body.title).toBe(createdTask.title);
+      expect(response.body.status).toBe(createdTask.status);
+    });
+
+    test('should return 400 for description exceeding max length', async () => {
+      const longDescription = 'a'.repeat(1001);
+
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ description: longDescription })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Descrição deve ter no máximo 1000 caracteres',
+      });
+    });
+
+    test('should return 400 for invalid due date', async () => {
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ dueDate: 'invalid-date' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Data de vencimento deve estar no formato ISO 8601',
+      });
     });
 
     test('should return 400 for empty update data', async () => {

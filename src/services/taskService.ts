@@ -34,6 +34,9 @@ export class TaskService {
   constructor(private dataStore: DataStore) {}
 
   async createTask(taskData: CreateTaskRequest): Promise<Task> {
+    const sanitizedDescription: Task['description'] = taskData.description ?? undefined;
+    const sanitizedDueDate: Task['dueDate'] = taskData.dueDate ?? undefined;
+
     this.validateCreateTaskData(taskData);
 
     const existingTask = await this.dataStore.findByTitle(taskData.title);
@@ -42,12 +45,20 @@ export class TaskService {
       throw new ConflictError('Uma tarefa com este título já existe');
     }
 
-    const task = await this.dataStore.create({
+    const newTaskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'> = {
       title: taskData.title,
-      description: taskData.description,
       status: taskData.status ?? 'todo',
-      dueDate: taskData.dueDate,
-    });
+    };
+
+    if (sanitizedDescription !== undefined) {
+      newTaskData.description = sanitizedDescription;
+    }
+
+    if (sanitizedDueDate !== undefined) {
+      newTaskData.dueDate = sanitizedDueDate;
+    }
+
+    const task = await this.dataStore.create(newTaskData);
 
     logger.info('Tarefa criada com sucesso', { taskId: task.id, title: task.title });
     return task;
@@ -117,6 +128,9 @@ export class TaskService {
   }
 
   async updateTask(id: string, taskData: UpdateTaskRequest): Promise<Task> {
+    const sanitizedDescription: Task['description'] = taskData.description ?? undefined;
+    const sanitizedDueDate: Task['dueDate'] = taskData.dueDate ?? undefined;
+
     this.validateUpdateTaskData(taskData);
 
     const existingTask = await this.dataStore.findById(id);
@@ -136,12 +150,14 @@ export class TaskService {
       }
     }
 
-    const updatedTask = await this.dataStore.update(id, {
+    const updatePayload: Partial<Task> = {
       title: taskData.title,
-      description: taskData.description,
       status: taskData.status,
-      dueDate: taskData.dueDate,
-    });
+      ...(taskData.description !== undefined ? { description: sanitizedDescription } : {}),
+      ...(taskData.dueDate !== undefined ? { dueDate: sanitizedDueDate } : {}),
+    };
+
+    const updatedTask = await this.dataStore.update(id, updatePayload);
 
     if (!updatedTask) {
       throw new NotFoundError('Tarefa não encontrada');
@@ -152,6 +168,9 @@ export class TaskService {
   }
 
   async partialUpdateTask(id: string, taskData: PartialUpdateTaskRequest): Promise<Task> {
+    const sanitizedDescription: Task['description'] = taskData.description ?? undefined;
+    const sanitizedDueDate: Task['dueDate'] = taskData.dueDate ?? undefined;
+
     this.validatePartialUpdateTaskData(taskData);
 
     const existingTask = await this.dataStore.findById(id);
@@ -160,7 +179,7 @@ export class TaskService {
       throw new NotFoundError('Tarefa não encontrada');
     }
 
-    if (taskData.title && taskData.title !== existingTask.title) {
+    if (taskData.title !== undefined && taskData.title !== existingTask.title) {
       const duplicateTask = await this.dataStore.findByTitle(taskData.title);
       if (duplicateTask && duplicateTask.id !== id) {
         logger.warn('Tentativa de atualizar para título duplicado', { 
@@ -171,13 +190,12 @@ export class TaskService {
       }
     }
 
-    const updates: Partial<Task> = {};
-    if (taskData.title !== undefined) {
-      updates.title = taskData.title;
-    }
-    if (taskData.status !== undefined) {
-      updates.status = taskData.status;
-    }
+    const updates: Partial<Task> = {
+      ...(taskData.title !== undefined ? { title: taskData.title } : {}),
+      ...(taskData.status !== undefined ? { status: taskData.status } : {}),
+      ...(taskData.description !== undefined ? { description: sanitizedDescription } : {}),
+      ...(taskData.dueDate !== undefined ? { dueDate: sanitizedDueDate } : {}),
+    };
 
     const updatedTask = await this.dataStore.update(id, updates);
 
@@ -205,7 +223,7 @@ export class TaskService {
   }
 
   private validateCreateTaskData(taskData: CreateTaskRequest): void {
-    if (!taskData.title || taskData.title.trim().length === 0) {
+    if (typeof taskData.title !== 'string' || taskData.title.trim().length === 0) {
       throw new ValidationError('Título é obrigatório');
     }
 
@@ -213,21 +231,28 @@ export class TaskService {
       throw new ValidationError('Título deve ter no máximo 200 caracteres');
     }
 
-    if (taskData.description && taskData.description.length > 1000) {
-      throw new ValidationError('Descrição deve ter no máximo 1000 caracteres');
+    if (taskData.description !== undefined && taskData.description !== null) {
+      if (typeof taskData.description !== 'string') {
+        throw new ValidationError('Descrição deve ser uma string');
+      }
+      if (taskData.description.length > 1000) {
+        throw new ValidationError('Descrição deve ter no máximo 1000 caracteres');
+      }
     }
 
-    if (taskData.status && !['todo', 'in-progress', 'done'].includes(taskData.status)) {
+    if (taskData.status !== undefined && !['todo', 'in-progress', 'done'].includes(taskData.status)) {
       throw new ValidationError('Status deve ser: todo, in-progress ou done');
     }
 
-    if (taskData.dueDate && !this.isValidISODate(taskData.dueDate)) {
-      throw new ValidationError('Data de vencimento deve estar no formato ISO 8601');
+    if (taskData.dueDate !== undefined && taskData.dueDate !== null) {
+      if (typeof taskData.dueDate !== 'string' || !this.isValidISODate(taskData.dueDate)) {
+        throw new ValidationError('Data de vencimento deve estar no formato ISO 8601');
+      }
     }
   }
 
   private validateUpdateTaskData(taskData: UpdateTaskRequest): void {
-    if (!taskData.title || taskData.title.trim().length === 0) {
+    if (typeof taskData.title !== 'string' || taskData.title.trim().length === 0) {
       throw new ValidationError('Título é obrigatório');
     }
 
@@ -235,16 +260,23 @@ export class TaskService {
       throw new ValidationError('Título deve ter no máximo 200 caracteres');
     }
 
-    if (taskData.description && taskData.description.length > 1000) {
-      throw new ValidationError('Descrição deve ter no máximo 1000 caracteres');
+    if (taskData.description !== undefined && taskData.description !== null) {
+      if (typeof taskData.description !== 'string') {
+        throw new ValidationError('Descrição deve ser uma string');
+      }
+      if (taskData.description.length > 1000) {
+        throw new ValidationError('Descrição deve ter no máximo 1000 caracteres');
+      }
     }
 
     if (!['todo', 'in-progress', 'done'].includes(taskData.status)) {
       throw new ValidationError('Status deve ser: todo, in-progress ou done');
     }
 
-    if (taskData.dueDate && !this.isValidISODate(taskData.dueDate)) {
-      throw new ValidationError('Data de vencimento deve estar no formato ISO 8601');
+    if (taskData.dueDate !== undefined && taskData.dueDate !== null) {
+      if (typeof taskData.dueDate !== 'string' || !this.isValidISODate(taskData.dueDate)) {
+        throw new ValidationError('Data de vencimento deve estar no formato ISO 8601');
+      }
     }
   }
 
@@ -254,7 +286,7 @@ export class TaskService {
     }
 
     if (taskData.title !== undefined) {
-      if (!taskData.title || taskData.title.trim().length === 0) {
+      if (typeof taskData.title !== 'string' || taskData.title.trim().length === 0) {
         throw new ValidationError('Título não pode estar vazio');
       }
       if (taskData.title.length > 200) {
@@ -262,8 +294,23 @@ export class TaskService {
       }
     }
 
-    if (taskData.status && !['todo', 'in-progress', 'done'].includes(taskData.status)) {
+    if (taskData.status !== undefined && !['todo', 'in-progress', 'done'].includes(taskData.status)) {
       throw new ValidationError('Status deve ser: todo, in-progress ou done');
+    }
+
+    if (taskData.description !== undefined && taskData.description !== null) {
+      if (typeof taskData.description !== 'string') {
+        throw new ValidationError('Descrição deve ser uma string');
+      }
+      if (taskData.description.length > 1000) {
+        throw new ValidationError('Descrição deve ter no máximo 1000 caracteres');
+      }
+    }
+
+    if (taskData.dueDate !== undefined) {
+      if (taskData.dueDate !== null && (typeof taskData.dueDate !== 'string' || !this.isValidISODate(taskData.dueDate))) {
+        throw new ValidationError('Data de vencimento deve estar no formato ISO 8601');
+      }
     }
   }
 

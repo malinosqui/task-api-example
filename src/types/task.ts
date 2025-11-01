@@ -26,6 +26,8 @@ export interface UpdateTaskRequest {
 export interface PartialUpdateTaskRequest {
   title?: string;
   status?: 'todo' | 'in-progress' | 'done';
+  description?: string;
+  dueDate?: string;
 }
 
 export interface TaskFilters {

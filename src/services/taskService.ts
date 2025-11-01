@@ -186,6 +186,12 @@ export class TaskService {
     if (taskData.status !== undefined) {
       updates.status = taskData.status;
     }
+    if (taskData.description !== undefined) {
+      updates.description = taskData.description;
+    }
+    if (taskData.dueDate !== undefined) {
+      updates.dueDate = taskData.dueDate;
+    }
 
     const updatedTask = await this.dataStore.update(id, updates);
 
@@ -272,6 +278,14 @@ export class TaskService {
 
     if (taskData.status && !['todo', 'in-progress', 'done'].includes(taskData.status)) {
       throw new ValidationError('Status deve ser: todo, in-progress ou done');
+    }
+
+    if (taskData.description !== undefined && taskData.description.length > 1000) {
+      throw new ValidationError('Descrição deve ter no máximo 1000 caracteres');
+    }
+
+    if (taskData.dueDate !== undefined && !this.isValidISODate(taskData.dueDate)) {
+      throw new ValidationError('Data de vencimento deve estar no formato ISO 8601');
     }
   }
 

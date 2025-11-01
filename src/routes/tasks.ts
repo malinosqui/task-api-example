@@ -251,7 +251,7 @@ export const createTaskRoutes = (taskService: TaskService): Router => {
     }
   });
 
-  // PATCH /tasks/:id - Partial update (title / status)
+  // PATCH /tasks/:id - Partial update (title / status / description / dueDate)
   router.patch('/:id', async (req: Request, res: Response) => {
     try {
       const { id } = req.params;

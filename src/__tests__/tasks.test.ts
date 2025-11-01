@@ -629,6 +629,40 @@ describe('Task API Routes', () => {
       expect(response.body.status).toBe('in-progress');
     });
 
+    test('should update task description only', async () => {
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ description: 'Descrição atualizada parcialmente' })
+        .expect(200);
+
+      expect(response.body.description).toBe('Descrição atualizada parcialmente');
+      expect(response.body.title).toBe(createdTask.title);
+      expect(response.body.status).toBe(createdTask.status);
+    });
+
+    test('should update task due date only', async () => {
+      const newDueDate = '2025-01-10T12:00:00.000Z';
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ dueDate: newDueDate })
+        .expect(200);
+
+      expect(response.body.dueDate).toBe(newDueDate);
+      expect(response.body.title).toBe(createdTask.title);
+      expect(response.body.status).toBe(createdTask.status);
+    });
+
+    test('should return 400 for invalid due date', async () => {
+      const response = await request(app)
+        .patch(`/tasks/${createdTask.id}`)
+        .send({ dueDate: 'invalid-date' })
+        .expect(400);
+
+      expect(response.body).toEqual({
+        error: 'Data de vencimento deve estar no formato ISO 8601',
+      });
+    });
+
     test('should return 400 for empty update data', async () => {
       const response = await request(app)
         .patch(`/tasks/${createdTask.id}`)
